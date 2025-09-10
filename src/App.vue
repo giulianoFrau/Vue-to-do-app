@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import Title from "./Title.vue";
-import Clock from "./Clock.vue";
-import Main from "./Main.vue";
+import Title from "../src/components/Title.vue";
+import Clock from "../src/components/Clock.vue";
+import Main from "../src/components/Main.vue";
 export default {
   components: {
     Title,

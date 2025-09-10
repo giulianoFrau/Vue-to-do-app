@@ -12,20 +12,8 @@
   </li>
 </template>
 
-<script>
-export default {
-  props: {
-    i: {
-      type: Number,
-    },
-    titolo: {
-      type: Array,
-    },
-    descrizione: {
-      type: Array,
-    },
-  },
-};
+<script setup>
+defineProps(["i", "titolo", "descrizione"]);
 </script>
 
 <style></style>
