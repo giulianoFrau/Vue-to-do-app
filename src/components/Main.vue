@@ -76,86 +76,75 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, onMounted } from "vue";
 import DeleteTask from "./DeleteTask.vue";
 import AddTask from "./AddTask.vue";
-export default {
-  components: {
-    DeleteTask,
-    AddTask,
-  },
-  data() {
-    return {
-      tasksArray: [],
-      tasksDeleted: [],
-      userData: {
-        textValue: "",
-        textValueDescription: "",
-      },
-    };
-  },
-  mounted() {
-    //per il local storage (https://vuejs.org/v2/cookbook/client-side-storage.html)
-    if (localStorage.getItem("tasksArray")) {
-      try {
-        this.tasksArray = JSON.parse(localStorage.getItem("tasksArray")); //serve ad analizzare il formato testuale (stringa) di JSON e a costruire il valore JavaScript o l'oggetto
-      } catch (e) {
-        console.log(e);
-      }
+
+const tasksArray = ref([]);
+const tasksDeleted = ref([]);
+const userData = reactive({
+  textValue: "",
+  textValueDescription: "",
+});
+
+function localStorageMethod() {
+  const parsed = JSON.stringify(tasksArray.value);
+  localStorage.setItem("tasksArray", parsed);
+}
+
+function addTask() {
+  if (tasksArray.value.length < 5) {
+    if (userData.textValue !== "" || userData.textValueDescription !== "") {
+      tasksArray.value.push([
+        userData.textValue,
+        userData.textValueDescription,
+      ]);
+      userData.textValue = "";
+      userData.textValueDescription = "";
+      localStorageMethod();
+    } else {
+      alert("Non hai inserito nessun dato");
     }
-  },
+  } else {
+    alert("La memoria della mia agenda non puoi superare 5 task");
+  }
+}
 
-  methods: {
-    localStorageMethod() {
-      const parsed = JSON.stringify(this.tasksArray); // per il local storage
-      localStorage.setItem("tasksArray", parsed);
-    },
-    addTask() {
-      if (this.tasksArray.length < 5) {
-        if (
-          this.userData.textValue != "" ||
-          this.userData.textValueDescription != ""
-        ) {
-          this.tasksArray.push([
-            this.userData.textValue,
-            this.userData.textValueDescription,
-          ]);
-          this.userData.textValue = "";
-          this.userData.textValueDescription = "";
-          this.localStorageMethod();
-        } else {
-          alert("Secondo te cosa inserisco se non hai scritto nulla????");
-        }
-      } else {
-        alert("Si,sono un 3310...ho già finito la memoria");
-      }
-    },
+function deleteTask(index) {
+  tasksDeleted.value.push(tasksArray.value[index]);
+  tasksArray.value.splice(index, 1);
+  localStorageMethod();
+}
 
-    deleteTask(index) {
-      this.tasksDeleted.push(this.tasksArray[index]);
-      this.tasksArray.splice(index, 1);
-      this.localStorageMethod();
-    },
-    deleteAll() {
-      if (this.tasksArray.length > 0) {
-        this.tasksArray = [];
-        this.localStorageMethod();
-      } else {
-        alert("la lista è gia vuota");
-      }
-    },
+function deleteAll() {
+  if (tasksArray.value.length > 0) {
+    tasksArray.value = [];
+    localStorageMethod();
+  } else {
+    alert("La lista è già vuota");
+  }
+}
 
-    resume(i) {
-      this.tasksArray.push(this.tasksDeleted[i]);
-      this.tasksDeleted.splice(i, 1);
-      this.localStorageMethod();
-    },
+function resume(i) {
+  tasksArray.value.push(tasksDeleted.value[i]);
+  tasksDeleted.value.splice(i, 1);
+  localStorageMethod();
+}
 
-    deleteDefinitely(i) {
-      this.tasksDeleted.splice(i, 1);
-    },
-  },
-};
+function deleteDefinitely(i) {
+  tasksDeleted.value.splice(i, 1);
+}
+
+onMounted(() => {
+  if (localStorage.getItem("tasksArray")) {
+    try {
+      tasksArray.value = JSON.parse(localStorage.getItem("tasksArray"));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+});
 </script>
 
 <style>
