@@ -1,30 +1,48 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="globalContainer d-flex align-items-center justify-content-center">
+    <form>
+      <Title :titolo="titolo"></Title>
+      <Clock></Clock>
+      <hr />
+      <Main></Main>
+    </form>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script>
+import Title from "./Title.vue";
+import Clock from "./Clock.vue";
+import Main from "./Main.vue";
+export default {
+  components: {
+    Title,
+    Clock,
+    Main,
+  },
+  data() {
+    return {
+      titolo: "🖥️ To do Application 🖥️",
+    };
+  },
+};
+</script>
+
+<style>
+.globalContainer {
+  height: 100vh;
+  background-image: url(https://static.vecteezy.com/ti/foto-gratuito/p1/1854615-bolle-su-sfondo-nero-gratuito-foto.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+form {
+  width: 70%;
+  padding: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 </style>
